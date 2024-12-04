@@ -12,5 +12,5 @@ public class Service
     public string Address { get; set; } = "0.0.0.0";
 
     [ForeignKey("CategoryId")]
-    public ServiceCategory ServiceCategory { get; set; }
+    public ServiceCategory? ServiceCategory { get; set; }
 }

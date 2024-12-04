@@ -2,10 +2,12 @@
 using Converters.Api.Entities;
 using Microsoft.EntityFrameworkCore;
 using Converters.Api.Data;
+using System.ComponentModel;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Converters.Api.Repositories;
 
-//TODO: finish CRUD functionality
+//TODO: Add documentation
 public class ServiceRepositry : IServiceRepository<Service>
 {
     private readonly ServicesDbContext _servicesDbContext;
@@ -15,10 +17,11 @@ public class ServiceRepositry : IServiceRepository<Service>
         _servicesDbContext = servicesDbContext;
     }
 
-    
+
     public async Task AddItem(string name, int categoryId, string type, string description, string address)
     {
-        Service item = new Service{
+        Service item = new Service
+        {
             Name = name,
             CategoryId = categoryId,
             Type = type,
@@ -29,7 +32,7 @@ public class ServiceRepositry : IServiceRepository<Service>
         await _servicesDbContext.SaveChangesAsync();
     }
 
-    public async Task<Service>? GetItem(int id)
+    public async Task<Service?> GetItem(int id)
     {
         return await _servicesDbContext.Services.Include(x => x.ServiceCategory).FirstOrDefaultAsync(x => x.Id == id);
     }
@@ -39,7 +42,7 @@ public class ServiceRepositry : IServiceRepository<Service>
         return await _servicesDbContext.Services.Include(x => x.ServiceCategory).ToListAsync();
     }
 
-    public async Task<ServiceCategory>? GetCategory(int id)
+    public async Task<ServiceCategory?> GetCategory(int id)
     {
         return await _servicesDbContext.Categories.FirstOrDefaultAsync(x => x.Id == id);
     }
@@ -49,33 +52,64 @@ public class ServiceRepositry : IServiceRepository<Service>
         return await _servicesDbContext.Categories.ToListAsync();
     }
 
-    //TODO: implement adding categories
-    public Task AddCategory(string name)
+    public async Task AddCategory(string name)
     {
-        throw new NotImplementedException();
+        await _servicesDbContext.Categories.AddAsync(new ServiceCategory
+        {
+            Name = name
+        });
+        await _servicesDbContext.SaveChangesAsync();
     }
 
-    //TODO: implement updating db items
-    public Task UpdateItem(int id)
+    public async Task<Service?> UpdateItem(int id, string name, int categoryId, string type, string description, string address)
     {
-        throw new NotImplementedException();
+        Service? service = await _servicesDbContext.Services.FirstOrDefaultAsync(x => x.Id == id);
+
+        if (service is not null)
+        {
+            service.Name = name;
+            service.CategoryId = categoryId;
+            service.Type = type;
+            service.Description = description;
+            service.Address = address;
+            await _servicesDbContext.SaveChangesAsync();
+        }
+
+        return service;
     }
 
-    //TODO: implement updating categories
-    public Task UpdateCategory(int id)
+    public async Task<ServiceCategory?> UpdateCategory(int id, string name)
     {
-        throw new NotImplementedException();
+        ServiceCategory? category = await _servicesDbContext.Categories.FirstOrDefaultAsync(x => x.Id == id);
+
+        if (category is not null)
+        {
+            category.Name = name;
+            await _servicesDbContext.SaveChangesAsync();
+        }
+
+        return category;
     }
 
-    //TODO: implement deletetion of items
-    public Task DeleteItem(int id)
+    public async Task<Service?> DeleteItem(int id)
     {
-        throw new NotImplementedException();
+        Service? service = await _servicesDbContext.Services.FirstOrDefaultAsync(x => x.Id == id);
+        if (service is not null){
+            _servicesDbContext.Services.Remove(service);
+            await _servicesDbContext.SaveChangesAsync();
+        }
+        
+        return service;
     }
 
-    //TODO: implement deletetion of categories
-    public Task DeleteCategory(int id)
+    public async Task<ServiceCategory?> DeleteCategory(int id)
     {
-        throw new NotImplementedException();
+        ServiceCategory? category = await _servicesDbContext.Categories.FirstOrDefaultAsync(x => x.Id == id);
+        if (category is not null){
+            _servicesDbContext.Categories.Remove(category);
+            await _servicesDbContext.SaveChangesAsync();
+        }
+        
+        return category;
     }
 }

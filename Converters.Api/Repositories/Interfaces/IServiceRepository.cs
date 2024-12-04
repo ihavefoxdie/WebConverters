@@ -39,40 +39,40 @@ public interface IServiceRepository<T>
     /// </summary>
     /// <param name="id">ID of the item.</param>
     /// <returns>Found item from the database.</returns>
-    public Task<T>? GetItem (int id);
+    public Task<T?> GetItem (int id);
 
     /// <summary>
     /// Get item category by id from database.
     /// </summary>
     /// <param name="id">ID of the category</param>
     /// <returns>Found category from the database.</returns>
-    public Task<ServiceCategory>? GetCategory(int id);
+    public Task<ServiceCategory?> GetCategory(int id);
 
     /// <summary>
     /// Edit particular item specified by its id.
     /// </summary>
     /// <param name="id">ID of the item.</param>
     /// <returns>Status code of the operation.</returns>
-    public Task UpdateItem(int id);
+    public Task<T?> UpdateItem(int id, string name, int categoryId, string type, string description, string address);
 
     /// <summary>
     /// Edit particular category specified by its id.
     /// </summary>
     /// <param name="id">ID of the category.</param>
     /// <returns>Status code of the operation.</returns>
-    public Task UpdateCategory(int id);
+    public Task<ServiceCategory?> UpdateCategory(int id, string name);
     
     /// <summary>
     /// Delete particular item specified by its id.
     /// </summary>
     /// <param name="id">ID of the item.</param>
     /// <returns>Status code of the operation.</returns>
-    public Task DeleteItem(int id);
+    public Task<T?> DeleteItem(int id);
 
     /// <summary>
     /// Delete particular category specified by its id.
     /// </summary>
     /// <param name="id">ID of the category.</param>
     /// <returns>Status code of the operation.</returns>
-    public Task DeleteCategory(int id);
+    public Task<ServiceCategory?> DeleteCategory(int id);
 }
