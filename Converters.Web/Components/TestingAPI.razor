@@ -1,0 +1,21 @@
+﻿@using Converters.Web.Services;
+<h3>TestingAPI Component</h3>
+
+@if(Services == null)
+{
+    <h3>THIS TOOK A LITTLE LONGER!!!</h3>
+}
+else
+{
+    <div style="background-color: orange; border-radius: 10px; display: flex; max-width: fit-content; justify-content: center; padding: 10px;">
+        <div>
+            @foreach(var service in Services)
+            {
+                <div>@service.Name</div>
+                <div>@service.Address</div>
+            }
+        </div>
+    </div>
+}
+
+

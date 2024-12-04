@@ -1,0 +1,68 @@
+﻿@using Converters.Models
+@using Converters.Web.Services.Interfaces
+
+<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">Converters.Web</a>
+        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+</div>
+
+<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
+    <nav class="flex-column">
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="counter">
+                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <h4 style="color: aliceblue;">Services:</h4>
+            @if (SortedServices is not null)
+                foreach (var serviceGroup in SortedServices)
+                {
+                    <div style="color: aliceblue;">@serviceGroup.Key</div>
+                    foreach (var service in serviceGroup)
+                    {
+                        <div class="nav-item px-2">
+                            <NavLink class="nav-link" href="@($"service/{service.Name}/{service.Id}")">
+                                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> @service.Name
+                            </NavLink>
+                        </div>
+                    }
+                }
+        </div>
+    </nav>
+</div>
+
+@code {
+    private bool collapseNavMenu = true;
+
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+
+    [Inject]
+    private IService<ServiceDTO>? Service { get; set; }
+
+    private IEnumerable<ServiceDTO>? Services { get; set; }
+    private IEnumerable<IGrouping<string, ServiceDTO>>? SortedServices { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Service is not null)
+        {
+            Services = await Service.GetItems();
+            SortedServices = Services.GroupBy(x => x.CategoryName);
+        }
+    }
+}

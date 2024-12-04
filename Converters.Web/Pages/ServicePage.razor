@@ -1,0 +1,15 @@
+﻿@page "/service/{Name?}/{ServiceId:int?}"
+    @{
+        @if (Name is null || ServiceId is null)
+        {
+            <h3>No service!</h3>
+        }
+        else
+        {
+            <h3>@Name</h3>
+            <Converters.Web.Components.ConverterComponent Name="@Name" ServiceId="@ServiceId.Value"/>
+        }
+    }
+
+
+    @* <h1>Address: @ServiceAddress</h1> *@
