@@ -16,7 +16,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContextPool<ServicesDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("ConvertersConnection"))
 );
-builder.Services.AddScoped<IServiceRepository<Service>, ServiceRepositry>();
+builder.Services.AddScoped<IServiceRepository<Service,ServiceCategory>, ServiceRepositry>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

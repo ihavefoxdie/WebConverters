@@ -10,9 +10,9 @@ namespace Converters.Api.Controllers;
 [ApiController]
 public class ServiceController : ControllerBase
 {
-    private readonly IServiceRepository<Service> _serviceRepository;
+    private readonly IServiceRepository<Service, ServiceCategory> _serviceRepository;
 
-    public ServiceController(IServiceRepository<Service> serviceRepository)
+    public ServiceController(IServiceRepository<Service, ServiceCategory> serviceRepository)
     {
         _serviceRepository = serviceRepository;
     }

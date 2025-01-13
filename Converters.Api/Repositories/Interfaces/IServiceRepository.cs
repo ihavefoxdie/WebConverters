@@ -2,7 +2,7 @@
 
 namespace Converters.Api.Repositories.Interfaces;
 
-public interface IServiceRepository<T>
+public interface IServiceRepository<T, T2>
 {
     /// <summary>
     /// Add item to the database.
@@ -46,7 +46,7 @@ public interface IServiceRepository<T>
     /// </summary>
     /// <param name="id">ID of the category</param>
     /// <returns>Found category from the database.</returns>
-    public Task<ServiceCategory?> GetCategory(int id);
+    public Task<T2?> GetCategory(int id);
 
     /// <summary>
     /// Edit particular item specified by its id.
@@ -60,7 +60,7 @@ public interface IServiceRepository<T>
     /// </summary>
     /// <param name="id">ID of the category.</param>
     /// <returns>Status code of the operation.</returns>
-    public Task<ServiceCategory?> UpdateCategory(int id, string name);
+    public Task<T2?> UpdateCategory(int id, string name);
     
     /// <summary>
     /// Delete particular item specified by its id.
@@ -74,5 +74,5 @@ public interface IServiceRepository<T>
     /// </summary>
     /// <param name="id">ID of the category.</param>
     /// <returns>Status code of the operation.</returns>
-    public Task<ServiceCategory?> DeleteCategory(int id);
+    public Task<T2?> DeleteCategory(int id);
 }

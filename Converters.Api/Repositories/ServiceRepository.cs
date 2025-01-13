@@ -8,7 +8,7 @@ using System.Reflection.Metadata.Ecma335;
 namespace Converters.Api.Repositories;
 
 //TODO: Add documentation
-public class ServiceRepositry : IServiceRepository<Service>
+public class ServiceRepositry : IServiceRepository<Service, ServiceCategory>
 {
     private readonly ServicesDbContext _servicesDbContext;
 
@@ -29,7 +29,7 @@ public class ServiceRepositry : IServiceRepository<Service>
             Address = address
         };
         await _servicesDbContext.Services.AddAsync(item);
-        await _servicesDbContext.SaveChangesAsync();
+        await SaveChangesAsync();
     }
 
     public async Task<Service?> GetItem(int id)
@@ -58,7 +58,7 @@ public class ServiceRepositry : IServiceRepository<Service>
         {
             Name = name
         });
-        await _servicesDbContext.SaveChangesAsync();
+        await SaveChangesAsync();
     }
 
     public async Task<Service?> UpdateItem(int id, string name, int categoryId, string type, string description, string address)
@@ -72,7 +72,7 @@ public class ServiceRepositry : IServiceRepository<Service>
             service.Type = type;
             service.Description = description;
             service.Address = address;
-            await _servicesDbContext.SaveChangesAsync();
+            await SaveChangesAsync();
         }
 
         return service;
@@ -85,7 +85,7 @@ public class ServiceRepositry : IServiceRepository<Service>
         if (category is not null)
         {
             category.Name = name;
-            await _servicesDbContext.SaveChangesAsync();
+            await SaveChangesAsync();
         }
 
         return category;
@@ -96,7 +96,7 @@ public class ServiceRepositry : IServiceRepository<Service>
         Service? service = await _servicesDbContext.Services.FirstOrDefaultAsync(x => x.Id == id);
         if (service is not null){
             _servicesDbContext.Services.Remove(service);
-            await _servicesDbContext.SaveChangesAsync();
+            await SaveChangesAsync();
         }
         
         return service;
@@ -107,9 +107,14 @@ public class ServiceRepositry : IServiceRepository<Service>
         ServiceCategory? category = await _servicesDbContext.Categories.FirstOrDefaultAsync(x => x.Id == id);
         if (category is not null){
             _servicesDbContext.Categories.Remove(category);
-            await _servicesDbContext.SaveChangesAsync();
+            await SaveChangesAsync();
         }
         
         return category;
+    }
+
+    private async Task SaveChangesAsync()
+    {
+        await _servicesDbContext.SaveChangesAsync();
     }
 }
