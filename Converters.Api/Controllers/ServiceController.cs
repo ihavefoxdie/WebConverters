@@ -5,7 +5,7 @@ using Converters.Models;
 
 namespace Converters.Api.Controllers;
 
-//TODO: separate category related actions into a new controller
+//TODO: Create an interface (something like ICRUDController?) and inherit from it?..
 [Route("api/[controller]/[action]")]
 [ApiController]
 public class ServiceController : ControllerBase
@@ -20,6 +20,11 @@ public class ServiceController : ControllerBase
 
 
     #region Post
+    /// <summary>
+    /// Adds a service object to the database.
+    /// </summary>
+    /// <param name="name">Service object's name</param>
+    /// <returns>HTTP status code.</returns>
     [HttpPost]
     public async Task<ActionResult> AddService(string name, int categoryId, string type, string description, string address)
     {
@@ -46,6 +51,11 @@ public class ServiceController : ControllerBase
 
 
     #region Get
+    /// <summary>
+    /// Gets the service object that has the matching id from the database.
+    /// </summary>
+    /// <param name="id">ID of the service object to match.</param>
+    /// <returns>The service object and an HTTP status code.</returns>
     [HttpGet]
     public async Task<ActionResult<ServiceDTO>> GetService(int id)
     {
@@ -84,6 +94,10 @@ public class ServiceController : ControllerBase
         return Ok(itemDTO);
     }
 
+    /// <summary>
+    /// Gets every category object from the database.
+    /// </summary>
+    /// <returns>The category object collection and an HTTP status code.</returns>
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ServiceDTO>>> GetServices()
     {
@@ -127,7 +141,18 @@ public class ServiceController : ControllerBase
     }
     #endregion
 
+
     #region Put
+    /// <summary>
+    /// Updates the service object that matches the ID in the database with the new data.
+    /// </summary>
+    /// <param name="id">ID of the service object to update.</param>
+    /// <param name="name">Name of the service object to update.</param>
+    /// <param name="categoryId">Category ID of the service object to update.</param>
+    /// <param name="type">Type of the service object to update.</param>
+    /// <param name="description">Description of the service object to update.</param>
+    /// <param name="address">Address of the service object to update.</param>
+    /// <returns></returns>
     [HttpPut]
     public async Task<ActionResult> UpdateItem(int id, string name, int categoryId, string type, string description, string address)
     {
@@ -156,7 +181,13 @@ public class ServiceController : ControllerBase
     }
     #endregion
 
+
     #region Delete
+    /// <summary>
+    /// Deletes the service object with the matching ID from the database.
+    /// </summary>
+    /// <param name="id">ID of the service object to delete.</param>
+    /// <returns>HTTP status code.</returns>    
     [HttpDelete]
     public async Task<ActionResult> DeleteItem(int id)
     {

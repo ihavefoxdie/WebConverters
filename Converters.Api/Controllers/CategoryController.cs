@@ -19,6 +19,11 @@ public class CategoryController : ControllerBase
 
 
     #region Post
+    /// <summary>
+    /// Adds a category object to the database.
+    /// </summary>
+    /// <param name="name">Category object's name</param>
+    /// <returns>HTTP status code.</returns>
     [HttpPost]
     public async Task<ActionResult> AddCategory(string name)
     {
@@ -41,6 +46,11 @@ public class CategoryController : ControllerBase
 
 
     #region Get
+    /// <summary>
+    /// Gets the category object that has the matching id from the database.
+    /// </summary>
+    /// <param name="id">ID of the category object to match.</param>
+    /// <returns>The category object and an HTTP status code.</returns>
     [HttpGet]
     public async Task<ActionResult<ServiceCategoryDTO>> GetCategory(int id)
     {
@@ -69,6 +79,10 @@ public class CategoryController : ControllerBase
         return Ok(itemDTO);
     }
 
+    /// <summary>
+    /// Gets every category object from the database.
+    /// </summary>
+    /// <returns>The category object collection and an HTTP status code.</returns>
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ServiceCategoryDTO>>> GetCategories()
     {
@@ -103,6 +117,12 @@ public class CategoryController : ControllerBase
 
 
     #region Put
+    /// <summary>
+    /// Updates the category object that matches the ID in the database with the new data.
+    /// </summary>
+    /// <param name="id">ID of the category object to update.</param>
+    /// <param name="name">Category object's new name.</param>
+    /// <returns>HTTP status code.</returns>
     [HttpPut]
     public async Task<ActionResult> UpdateCategory(int id, string name)
     {
@@ -129,6 +149,11 @@ public class CategoryController : ControllerBase
 
 
     #region Delete
+    /// <summary>
+    /// Deletes the category object with the matching ID from the database.
+    /// </summary>
+    /// <param name="id">ID of the category object to delete.</param>
+    /// <returns>HTTP status code.</returns>
     [HttpDelete]
     public async Task<ActionResult> DeleteCategory(int id)
     {
