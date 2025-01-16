@@ -3,6 +3,7 @@ using Converters.Api.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Converters.Models;
 using Microsoft.AspNetCore.Http.Features;
+using System.ComponentModel;
 
 namespace Converters.Api.Controllers;
 
@@ -10,11 +11,13 @@ namespace Converters.Api.Controllers;
 [ApiController]
 public class ServiceController : ControllerBase
 {
-    private readonly IServiceRepository<Service, ServiceCategory> _serviceRepository;
+    private readonly IServiceRepository<Service> _serviceRepository;
+    private readonly ICategoryRepository<ServiceCategory> _categoryRepository;
 
-    public ServiceController(IServiceRepository<Service, ServiceCategory> serviceRepository)
+    public ServiceController(IServiceRepository<Service> serviceRepository, ICategoryRepository<ServiceCategory> categoryRepository)
     {
         _serviceRepository = serviceRepository;
+        _categoryRepository = categoryRepository;
     }
 
 
@@ -25,7 +28,15 @@ public class ServiceController : ControllerBase
     {
         try
         {
-            await _serviceRepository.AddItem(name, categoryId, type, description, address);
+            Service service = new()
+            {
+                Name = name,
+                CategoryId = categoryId,
+                Type = type,
+                Description = description,
+                Address = address
+            };
+            await _serviceRepository.AddItem(service);
         }
         catch (Exception ex)
         {
@@ -40,7 +51,11 @@ public class ServiceController : ControllerBase
     {
         try
         {
-            await _serviceRepository.AddCategory(name);
+            ServiceCategory category = new()
+            {
+                Name = name
+            };
+            await _categoryRepository.AddCategory(category);
         }
         catch (Exception ex)
         {
@@ -138,7 +153,7 @@ public class ServiceController : ControllerBase
         ServiceCategoryDTO itemDTO;
         try
         {
-            ServiceCategory? item = await _serviceRepository.GetCategory(id);
+            ServiceCategory? item = await _categoryRepository.GetCategory(id);
 
             if (item == null)
             {
@@ -166,7 +181,7 @@ public class ServiceController : ControllerBase
         List<ServiceCategoryDTO> itemsDTO = [];
         try
         {
-            IEnumerable<ServiceCategory>? items = await _serviceRepository.GetCategories();
+            IEnumerable<ServiceCategory>? items = await _categoryRepository.GetCategories();
 
             if (items == null)
             {
@@ -198,9 +213,18 @@ public class ServiceController : ControllerBase
     {
         try
         {
-            Service? service = await _serviceRepository.UpdateItem(id, name, categoryId, type, description, address);
+            Service service = new()
+            {
+                Id = id,
+                Name = name,
+                CategoryId = categoryId,
+                Type = type,
+                Description = description,
+                Address = address
+            };
+            Service? updatedService = await _serviceRepository.UpdateItem(service);
 
-            if (service is null)
+            if (updatedService is null)
                 return NotFound();
         }
         catch (Exception ex)
@@ -216,7 +240,12 @@ public class ServiceController : ControllerBase
     {
         try
         {
-            ServiceCategory? category = await _serviceRepository.UpdateCategory(id, name);
+            ServiceCategory changedCategory = new()
+            {
+                Name = name,
+                Id = id  
+            };
+            ServiceCategory? category = await _categoryRepository.UpdateCategory(changedCategory);
 
             if (category is null)
                 return NotFound();
@@ -254,7 +283,7 @@ public class ServiceController : ControllerBase
     {
         try
         {
-            ServiceCategory? category = await _serviceRepository.DeleteCategory(id);
+            ServiceCategory? category = await _categoryRepository.DeleteCategory(id);
 
             if (category is null)
                 return NotFound();

@@ -2,77 +2,43 @@
 
 namespace Converters.Api.Repositories.Interfaces;
 
-public interface IServiceRepository<T, T2>
+public interface IServiceRepository<T>
 {
     /// <summary>
-    /// Add item to the database.
+    /// Adds an item (of type <c><typeparamref name="T"/></c>) to the database.
     /// </summary>
-    /// <param name="name">Name of the item.</param>
-    /// <param name="categoryId">ID of the corresponding category from the database.</param>
-    /// <param name="type">Type of the item.</param>
-    /// <param name="description">Description of the item.</param>
-    /// <param name="address">Item's api address.</param>
-    /// <returns>Status code of the operation.</returns>
-    public Task AddItem(string name, int categoryId, string type, string description, string address);
+    /// <param name="service">A new object to add.</param>
+    /// <returns>Task.</returns>
+    public Task AddItem(T service);
+
 
     /// <summary>
-    /// Add category to the database.
+    /// Returns every item (of type <c><typeparamref name="T"/></c>) from the database.
     /// </summary>
-    /// <param name="name"></param>
-    /// <returns>Status code of the operation.</returns>
-    public Task AddCategory(string name);
-
-    /// <summary>
-    /// Get every item from the database.
-    /// </summary>
-    /// <returns>A collection of every item found in the database.</returns>
+    /// <returns>A collection of every item from the database.</returns>
     public Task<IEnumerable<T>> GetItems();
 
-    /// <summary>
-    /// Get every item category from the database.
-    /// </summary>
-    /// <returns>A collection of every item category found in the database.</returns>
-    public Task<IEnumerable<ServiceCategory>> GetCategories();
 
     /// <summary>
-    /// Get item by id from database. 
+    /// Returns a item (of type <c><typeparamref name="T"/></c>) if it exists.
     /// </summary>
-    /// <param name="id">ID of the item.</param>
-    /// <returns>Found item from the database.</returns>
+    /// <param name="id">ID of the item to return from the database.</param>
+    /// <returns>Found item if found. Otherwise, returns null.</returns>
     public Task<T?> GetItem (int id);
 
-    /// <summary>
-    /// Get item category by id from database.
-    /// </summary>
-    /// <param name="id">ID of the category</param>
-    /// <returns>Found category from the database.</returns>
-    public Task<T2?> GetCategory(int id);
 
     /// <summary>
-    /// Edit particular item specified by its id.
+    /// Updates the item (of type <c><typeparamref name="T"/></c>) with the matching ID.
     /// </summary>
-    /// <param name="id">ID of the item.</param>
-    /// <returns>Status code of the operation.</returns>
-    public Task<T?> UpdateItem(int id, string name, int categoryId, string type, string description, string address);
+    /// <param name="updatedService">The updated object to replace the older one with.</param>
+    /// <returns>Updated item.</returns>
+    public Task<T?> UpdateItem(T updatedService);
 
-    /// <summary>
-    /// Edit particular category specified by its id.
-    /// </summary>
-    /// <param name="id">ID of the category.</param>
-    /// <returns>Status code of the operation.</returns>
-    public Task<T2?> UpdateCategory(int id, string name);
     
     /// <summary>
-    /// Delete particular item specified by its id.
+    /// Deletes the item (of type <c><typeparamref name="T"/></c>) with the matching id.
     /// </summary>
-    /// <param name="id">ID of the item.</param>
-    /// <returns>Status code of the operation.</returns>
+    /// <param name="id">ID of the item to delete.</param>
+    /// <returns>Deleted item.</returns>
     public Task<T?> DeleteItem(int id);
-
-    /// <summary>
-    /// Delete particular category specified by its id.
-    /// </summary>
-    /// <param name="id">ID of the category.</param>
-    /// <returns>Status code of the operation.</returns>
-    public Task<T2?> DeleteCategory(int id);
 }
